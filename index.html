@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toxicity Analyzer</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="container">
+<h1>🧪 Lifestyle Chemical Toxicity Analyzer</h1>
+<p class="sub">Luxury Scientific Dashboard</p>
+
+<div class="card">
+<input type="number" id="smoke" placeholder="Cigarettes / day">
+<input type="number" id="alcohol" placeholder="Alcohol drinks / week">
+<input type="number" id="junk" placeholder="Junk meals / week">
+<input type="number" id="soft" placeholder="Soft drinks / week">
+<input type="number" id="water" placeholder="Water liters / day">
+<input type="number" id="exercise" placeholder="Exercise mins / day">
+
+<button onclick="analyze()">Analyze Toxicity</button>
+</div>
+
+<div class="results card">
+<h2 id="score">Toxicity Score: --</h2>
+<h3 id="risk">Risk Level: --</h3>
+<p id="suggest"></p>
+</div>
+
+<div class="chart-box card">
+<canvas id="barChart"></canvas>
+</div>
+
+<div class="chart-box card">
+<canvas id="radarChart"></canvas>
+</div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
