@@ -3,43 +3,105 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Toxicity Analyzer</title>
+<title>Toxicity Analyzer Pro</title>
+
 <link rel="stylesheet" href="style.css">
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
-<div class="container">
-<h1>🧪 Lifestyle Chemical Toxicity Analyzer</h1>
-<p class="sub">Luxury Scientific Dashboard</p>
+<div class="bg-blur one"></div>
+<div class="bg-blur two"></div>
 
-<div class="card">
-<input type="number" id="smoke" placeholder="Cigarettes / day">
-<input type="number" id="alcohol" placeholder="Alcohol drinks / week">
-<input type="number" id="junk" placeholder="Junk meals / week">
-<input type="number" id="soft" placeholder="Soft drinks / week">
-<input type="number" id="water" placeholder="Water liters / day">
-<input type="number" id="exercise" placeholder="Exercise mins / day">
+<div class="container">
+
+<header class="hero">
+<h1>⚪ Lifestyle Chemical Toxicity Analyzer</h1>
+<p>Advanced Scientific Habit Impact Dashboard</p>
+</header>
+
+<section class="card form-card">
+<h2>Enter Toxic Habit Inputs</h2>
+
+<div class="input-grid">
+
+<input type="number" id="smoke" placeholder="🚬 Cigarettes / day">
+<input type="number" id="alcohol" placeholder="🍺 Alcohol drinks / week">
+<input type="number" id="junk" placeholder="🍔 Junk meals / week">
+<input type="number" id="soft" placeholder="🥤 Soft drinks / week">
+<input type="number" id="snacks" placeholder="🍟 Packaged snacks / week">
+<input type="number" id="water" placeholder="💧 Water liters / day">
+<input type="number" id="exercise" placeholder="🏃 Exercise mins / day">
+
+</div>
 
 <button onclick="analyze()">Analyze Toxicity</button>
-</div>
 
-<div class="results card">
+</section>
+
+<section class="results">
+
+<div class="card score-card">
 <h2 id="score">Toxicity Score: --</h2>
 <h3 id="risk">Risk Level: --</h3>
-<p id="suggest"></p>
+
+<div class="meter">
+<div id="fill"></div>
 </div>
 
-<div class="chart-box card">
+</div>
+
+<div class="stats-grid">
+
+<div class="card mini">
+<h3>🫀 Organ Age</h3>
+<p id="organAge">--</p>
+</div>
+
+<div class="card mini">
+<h3>💸 Monthly Waste</h3>
+<p id="money">--</p>
+</div>
+
+<div class="card mini">
+<h3>🧬 DNA Damage Risk</h3>
+<p id="dna">--</p>
+</div>
+
+<div class="card mini">
+<h3>🤖 AI Scientific Report</h3>
+<p id="report">--</p>
+</div>
+
+</div>
+
+<div class="chart-grid">
+
+<div class="card chart-box">
+<h3>Chemical Exposure</h3>
 <canvas id="barChart"></canvas>
 </div>
 
-<div class="chart-box card">
+<div class="card chart-box">
+<h3>Organ Stress Radar</h3>
 <canvas id="radarChart"></canvas>
 </div>
 
 </div>
 
+</section>
+
+<footer>
+Designed for Academic Chemical Awareness Project
+</footer>
+
+</div>
+
 <script src="script.js"></script>
+
 </body>
 </html>

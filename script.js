@@ -1,71 +1,182 @@
-let barChart, radarChart;
+let barChart;
+let radarChart;
 
-function analyze(){
+function analyze() {
 
-let smoke = +document.getElementById("smoke").value || 0;
-let alcohol = +document.getElementById("alcohol").value || 0;
-let junk = +document.getElementById("junk").value || 0;
-let soft = +document.getElementById("soft").value || 0;
-let water = +document.getElementById("water").value || 0;
-let exercise = +document.getElementById("exercise").value || 0;
+let smoke = Number(document.getElementById("smoke").value) || 0;
+let alcohol = Number(document.getElementById("alcohol").value) || 0;
+let junk = Number(document.getElementById("junk").value) || 0;
+let soft = Number(document.getElementById("soft").value) || 0;
+let snacks = Number(document.getElementById("snacks").value) || 0;
+let water = Number(document.getElementById("water").value) || 0;
+let exercise = Number(document.getElementById("exercise").value) || 0;
 
-let score = smoke*4 + alcohol*3 + junk*2 + soft*2 - water*3 - exercise*0.2;
+/* TOXICITY SCORE */
+let score =
+(smoke * 5) +
+(alcohol * 3.5) +
+(junk * 2.8) +
+(soft * 2.5) +
+(snacks * 2.2) -
+(water * 4) -
+(exercise * 0.25);
 
-if(score < 0) score = 0;
-if(score > 100) score = 100;
+score = Math.max(0, Math.min(100, score));
+score = score.toFixed(1);
 
-document.getElementById("score").innerText = "Toxicity Score: " + score.toFixed(1);
-
+/* RISK LEVEL */
 let risk = "Low";
-if(score>25) risk="Moderate";
-if(score>50) risk="High";
-if(score>75) risk="Hazardous";
+if(score > 25) risk = "Moderate";
+if(score > 50) risk = "High";
+if(score > 75) risk = "Hazardous";
 
-document.getElementById("risk").innerText = "Risk Level: " + risk;
+/* UI Update */
+document.getElementById("score").innerText =
+"Toxicity Score: " + score;
 
-document.getElementById("suggest").innerText =
-score>50 ?
-"⚠ Reduce smoking, alcohol, sugary drinks. Increase water & exercise." :
-"✅ Maintain healthy routine.";
+document.getElementById("risk").innerText =
+"Risk Level: " + risk;
 
-makeBar(smoke,alcohol,junk,soft);
-makeRadar(score);
+document.getElementById("fill").style.width =
+score + "%";
+
+/* ORGAN AGE */
+let organAge =
+18 +
+(smoke * 0.9) +
+(alcohol * 0.6) +
+(junk * 0.4) +
+(soft * 0.3) -
+(exercise * 0.05);
+
+organAge = Math.max(18, organAge.toFixed(0));
+
+document.getElementById("organAge").innerText =
+organAge + " Years";
+
+/* MONEY WASTE */
+let money =
+(smoke * 20 * 30) +
+(alcohol * 180 * 4) +
+(junk * 120 * 4) +
+(soft * 40 * 4) +
+(snacks * 30 * 4);
+
+document.getElementById("money").innerText =
+"₹" + money.toLocaleString() + " / month";
+
+/* DNA DAMAGE */
+let dna = "Low";
+if(score > 30) dna = "Moderate";
+if(score > 60) dna = "High";
+if(score > 80) dna = "Critical";
+
+document.getElementById("dna").innerText = dna;
+
+/* AI REPORT */
+let report = "Healthy balance maintained.";
+
+if(score > 25){
+report = "Mild chemical stress detected from lifestyle habits.";
+}
+if(score > 50){
+report = "Significant toxic exposure affecting body systems.";
+}
+if(score > 75){
+report = "Severe long-term oxidative stress risk predicted.";
 }
 
-function makeBar(smoke,alcohol,junk,soft){
+document.getElementById("report").innerText = report;
+
+/* CHARTS */
+makeBar(smoke, alcohol, junk, soft, snacks);
+makeRadar(score);
+
+}
+
+/* BAR CHART */
+function makeBar(smoke, alcohol, junk, soft, snacks){
 
 if(barChart) barChart.destroy();
 
-barChart = new Chart(document.getElementById("barChart"),{
+barChart = new Chart(
+document.getElementById("barChart"),
+{
 type:'bar',
 data:{
-labels:["Nicotine","Ethanol","Acrylamide","Sugar Load"],
+labels:[
+'Nicotine',
+'Ethanol',
+'Acrylamide',
+'Sugar Load',
+'Preservatives'
+],
 datasets:[{
-label:"Chemical Exposure",
-data:[smoke*5,alcohol*4,junk*3,soft*4]
+label:'Chemical Exposure',
+data:[
+smoke * 6,
+alcohol * 5,
+junk * 4,
+soft * 4,
+snacks * 3
+],
+borderRadius:8
 }]
+},
+options:{
+responsive:true,
+plugins:{
+legend:{display:false}
+},
+scales:{
+y:{
+beginAtZero:true
+}
+}
 }
 });
 }
 
+/* RADAR CHART */
 function makeRadar(score){
 
 if(radarChart) radarChart.destroy();
 
-radarChart = new Chart(document.getElementById("radarChart"),{
+radarChart = new Chart(
+document.getElementById("radarChart"),
+{
 type:'radar',
 data:{
-labels:["Lungs","Liver","Heart","Kidney","Brain"],
+labels:[
+'Lungs',
+'Liver',
+'Heart',
+'Kidney',
+'Brain'
+],
 datasets:[{
-label:"Organ Stress",
+label:'Stress Level',
 data:[
-score*0.9,
-score*0.8,
-score*0.7,
-score*0.5,
-score*0.6
-]
+score * 0.95,
+score * 0.82,
+score * 0.74,
+score * 0.58,
+score * 0.67
+],
+fill:true
 }]
+},
+options:{
+responsive:true,
+plugins:{
+legend:{display:false}
+},
+scales:{
+r:{
+beginAtZero:true,
+max:100
+}
+}
 }
 });
 }
