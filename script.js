@@ -1,8 +1,15 @@
+/* script.js */
+
 let barChart;
 let radarChart;
 
-function analyze() {
+function analyze(){
 
+let error = document.getElementById("error");
+error.innerText = "";
+
+/* Inputs */
+let age = Number(document.getElementById("age").value);
 let smoke = Number(document.getElementById("smoke").value) || 0;
 let alcohol = Number(document.getElementById("alcohol").value) || 0;
 let junk = Number(document.getElementById("junk").value) || 0;
@@ -11,26 +18,49 @@ let snacks = Number(document.getElementById("snacks").value) || 0;
 let water = Number(document.getElementById("water").value) || 0;
 let exercise = Number(document.getElementById("exercise").value) || 0;
 
-/* TOXICITY SCORE */
+/* Validation */
+
+if(!age || age <= 0){
+error.innerText = "Please enter valid age.";
+return;
+}
+
+if(
+smoke < 0 ||
+alcohol < 0 ||
+junk < 0 ||
+soft < 0 ||
+snacks < 0 ||
+water < 0 ||
+exercise < 0
+){
+error.innerText = "Negative values are not allowed.";
+return;
+}
+
+/* Score Formula */
+
 let score =
-(smoke * 5) +
-(alcohol * 3.5) +
-(junk * 2.8) +
-(soft * 2.5) +
-(snacks * 2.2) -
-(water * 4) -
-(exercise * 0.25);
+(age * 0.4) +
+(smoke * 12) +
+(alcohol * 7) +
+(junk * 5) +
+(soft * 4) +
+(snacks * 4) -
+(water * 2) -
+(exercise * 0.15);
 
-score = Math.max(0, Math.min(100, score));
-score = score.toFixed(1);
+score = Math.max(0, Math.min(100, Math.round(score)));
 
-/* RISK LEVEL */
+/* Risk */
+
 let risk = "Low";
-if(score > 25) risk = "Moderate";
-if(score > 50) risk = "High";
-if(score > 75) risk = "Hazardous";
+if(score >= 25) risk = "Moderate";
+if(score >= 50) risk = "High";
+if(score >= 75) risk = "Hazardous";
 
-/* UI Update */
+/* Update UI */
+
 document.getElementById("score").innerText =
 "Toxicity Score: " + score;
 
@@ -40,61 +70,68 @@ document.getElementById("risk").innerText =
 document.getElementById("fill").style.width =
 score + "%";
 
-/* ORGAN AGE */
+/* Organ Age */
+
 let organAge =
-18 +
-(smoke * 0.9) +
-(alcohol * 0.6) +
-(junk * 0.4) +
-(soft * 0.3) -
+age +
+(smoke * 2) +
+(alcohol * 1.5) +
+(junk * 1.2) +
+(soft * 1) +
+(snacks * 0.8) -
 (exercise * 0.05);
 
-organAge = Math.max(18, organAge.toFixed(0));
+organAge = Math.round(Math.max(age, organAge));
 
 document.getElementById("organAge").innerText =
 organAge + " Years";
 
-/* MONEY WASTE */
+/* Money Waste */
+
 let money =
 (smoke * 20 * 30) +
-(alcohol * 180 * 4) +
-(junk * 120 * 4) +
-(soft * 40 * 4) +
-(snacks * 30 * 4);
+(alcohol * 220 * 4) +
+(junk * 140 * 4) +
+(soft * 45 * 4) +
+(snacks * 35 * 4);
 
 document.getElementById("money").innerText =
 "₹" + money.toLocaleString() + " / month";
 
-/* DNA DAMAGE */
+/* DNA Risk */
+
 let dna = "Low";
-if(score > 30) dna = "Moderate";
-if(score > 60) dna = "High";
-if(score > 80) dna = "Critical";
+if(score >= 30) dna = "Moderate";
+if(score >= 60) dna = "High";
+if(score >= 80) dna = "Critical";
 
 document.getElementById("dna").innerText = dna;
 
-/* AI REPORT */
+/* AI Report */
+
 let report = "Healthy balance maintained.";
 
-if(score > 25){
-report = "Mild chemical stress detected from lifestyle habits.";
+if(score >= 25){
+report = "Mild chemical burden detected.";
 }
-if(score > 50){
-report = "Significant toxic exposure affecting body systems.";
+if(score >= 50){
+report = "Significant oxidative stress predicted.";
 }
-if(score > 75){
-report = "Severe long-term oxidative stress risk predicted.";
+if(score >= 75){
+report = "Severe organ stress likely if habits continue.";
 }
 
 document.getElementById("report").innerText = report;
 
-/* CHARTS */
+/* Charts */
+
 makeBar(smoke, alcohol, junk, soft, snacks);
 makeRadar(score);
 
 }
 
-/* BAR CHART */
+/* Bar Chart */
+
 function makeBar(smoke, alcohol, junk, soft, snacks){
 
 if(barChart) barChart.destroy();
@@ -102,23 +139,22 @@ if(barChart) barChart.destroy();
 barChart = new Chart(
 document.getElementById("barChart"),
 {
-type:'bar',
+type:"bar",
 data:{
 labels:[
-'Nicotine',
-'Ethanol',
-'Acrylamide',
-'Sugar Load',
-'Preservatives'
+"Nicotine",
+"Ethanol",
+"Acrylamide",
+"Sugar Load",
+"Preservatives"
 ],
 datasets:[{
-label:'Chemical Exposure',
 data:[
-smoke * 6,
-alcohol * 5,
-junk * 4,
-soft * 4,
-snacks * 3
+smoke * 15,
+alcohol * 10,
+junk * 8,
+soft * 8,
+snacks * 7
 ],
 borderRadius:8
 }]
@@ -130,14 +166,16 @@ legend:{display:false}
 },
 scales:{
 y:{
-beginAtZero:true
+beginAtZero:true,
+max:100
 }
 }
 }
 });
 }
 
-/* RADAR CHART */
+/* Radar Chart */
+
 function makeRadar(score){
 
 if(radarChart) radarChart.destroy();
@@ -145,23 +183,22 @@ if(radarChart) radarChart.destroy();
 radarChart = new Chart(
 document.getElementById("radarChart"),
 {
-type:'radar',
+type:"radar",
 data:{
 labels:[
-'Lungs',
-'Liver',
-'Heart',
-'Kidney',
-'Brain'
+"Lungs",
+"Liver",
+"Heart",
+"Kidney",
+"Brain"
 ],
 datasets:[{
-label:'Stress Level',
 data:[
 score * 0.95,
-score * 0.82,
-score * 0.74,
-score * 0.58,
-score * 0.67
+score * 0.85,
+score * 0.78,
+score * 0.65,
+score * 0.72
 ],
 fill:true
 }]
